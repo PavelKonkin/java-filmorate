@@ -13,7 +13,7 @@ import java.time.LocalDate;
  */
 @Data
 public class Film {
-    private final int id = idCounter++;
+    private final int id = idCounter;
     @NotNull
     @NotBlank
     private String name;
@@ -26,6 +26,10 @@ public class Film {
 
     public static void setBackIdCounter() {
         idCounter--;
+    }
+
+    public static void increaseIdCounter() {
+        idCounter++;
     }
 
 }

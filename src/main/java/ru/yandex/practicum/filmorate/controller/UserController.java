@@ -26,6 +26,7 @@ public class UserController {
     @PostMapping
     public User create(@Valid @RequestBody User user) throws ValidationException {
         if (validate(user)) {
+            User.increaseIdCounter();
             if ((user.getName() == null) || user.getName().isBlank()) {
                 user.setName(user.getLogin());
             }
@@ -33,7 +34,7 @@ public class UserController {
             users.put(user.getId(), user);
             return user;
         } else {
-            User.setBackIdCounter();
+            //User.setBackIdCounter();
             log.info("Ошибка валидации пользователя {}", user);
             throw new ValidationException();
         }
@@ -41,7 +42,7 @@ public class UserController {
 
     @PutMapping
     public User update(@Valid @RequestBody User user) throws ValidationException {
-        User.setBackIdCounter();
+        //User.setBackIdCounter();
         if (validate(user) && users.containsKey(user.getId())) {
             if ((user.getName() == null) || user.getName().isBlank()) {
                 user.setName(user.getLogin());

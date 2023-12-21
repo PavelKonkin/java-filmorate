@@ -32,24 +32,20 @@ class FilmControllerTest {
         film1.setName("film1");
         film1.setDuration(100);
         film1.setReleaseDate(LocalDate.now().minusYears(10));
-
+        filmControllerWithFilms.create(film1);
 
         film2 = new Film();
         film2.setDescription("film2");
         film2.setName("film2");
         film2.setDuration(100);
         film2.setReleaseDate(LocalDate.now().minusYears(10));
-
+        filmControllerWithFilms.create(film2);
 
         film3 = new Film();
         film3.setDescription("film3");
         film3.setName("film3");
         film3.setDuration(100);
         film3.setReleaseDate(LocalDate.now().minusYears(10));
-
-
-        filmControllerWithFilms.create(film1);
-        filmControllerWithFilms.create(film2);
 
         invalidDurationFilm = new Film();
         invalidDurationFilm.setDescription("invalidDurationFilm");
@@ -85,7 +81,7 @@ class FilmControllerTest {
     }
 
     @Test
-    void shouldReturnUsersList() {
+    void shouldReturnFilmsList() {
         assertEquals(List.of(film1, film2), filmControllerWithFilms.findAll());
     }
 

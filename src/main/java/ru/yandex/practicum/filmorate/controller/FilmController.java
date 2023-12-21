@@ -31,11 +31,11 @@ public class FilmController {
     @PostMapping
     public Film create(@Valid @RequestBody Film film) throws ValidationException {
         if (validate(film)) {
+            Film.increaseIdCounter();
             log.info("Создан фильм {}", film);
             films.put(film.getId(), film);
             return film;
         } else {
-            Film.setBackIdCounter();
             log.info("Ошибка валидации фильма {}", film);
             throw new ValidationException();
         }
@@ -43,7 +43,6 @@ public class FilmController {
 
     @PutMapping
     public Film update(@Valid @RequestBody Film film) throws ValidationException {
-        Film.setBackIdCounter();
         if (validate(film) && films.containsKey(film.getId())) {
             log.info("Обновлен фильм {}", film);
             films.put(film.getId(), film);

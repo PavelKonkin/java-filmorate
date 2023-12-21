@@ -33,21 +33,20 @@ class UserControllerTest {
         user1.setLogin("user1");
         user1.setBirthday(LocalDate.now().minusYears(30));
         user1.setEmail("user1@mail.ru");
+        userControllerWithUsers.create(user1);
 
         user2 = new User();
         user2.setName("user2");
         user2.setLogin("user2");
         user2.setBirthday(LocalDate.now().minusYears(30));
         user2.setEmail("user2@mail.ru");
+        userControllerWithUsers.create(user2);
 
         user3 = new User();
         user3.setName("user3");
         user3.setLogin("user3");
         user3.setBirthday(LocalDate.now().minusYears(30));
         user3.setEmail("user3@mail.ru");
-
-        userControllerWithUsers.create(user1);
-        userControllerWithUsers.create(user2);
 
         invalidLoginUser = new User();
         invalidLoginUser.setName("user2");

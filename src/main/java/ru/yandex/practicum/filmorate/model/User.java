@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Data
 public class User {
-    private final int id = idCounter++;
+    private final int id = idCounter;
     @Email
     private String email;
     @NotNull
@@ -21,7 +21,7 @@ public class User {
     private LocalDate birthday;
     private static int idCounter = 1;
 
-    public static void setBackIdCounter() {
-        idCounter--;
+    public static void increaseIdCounter() {
+        idCounter++;
     }
 }
