@@ -16,10 +16,10 @@ import java.util.Map;
 @RequestMapping("/films")
 public class FilmController {
     private final Map<Integer, Film> films = new HashMap<>();
-    private final static LocalDate MIN_RELEASE_DATE
+    private static final  LocalDate MIN_RELEASE_DATE
             = LocalDate.of(1895, 12, 28);
-    private final static int MIN_DURATION = 1;
-    private final static int MAX_DESCRIPTION_LENGTH = 200;
+    private static final  int MIN_DURATION = 1;
+    private static final  int MAX_DESCRIPTION_LENGTH = 200;
 
 
     @GetMapping
