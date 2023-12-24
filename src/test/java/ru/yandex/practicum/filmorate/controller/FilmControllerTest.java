@@ -5,11 +5,17 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FilmControllerTest {
     FilmController filmControllerWithFilms;
@@ -21,6 +27,8 @@ class FilmControllerTest {
     Film invalidReleaseDateFilm;
     Film invalidDescriptionLengthFilm;
     Film invalidNameFilm;
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    Validator validator = factory.getValidator();
 
     @BeforeEach
     void initializeTestData() throws ValidationException {
@@ -91,23 +99,28 @@ class FilmControllerTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenCreateInvalidDurationFilm() {
-        assertThrows(ValidationException.class, () -> filmControllerWithFilms.create(invalidDurationFilm));
+    void shouldFailValidationWhenCreateInvalidDurationFilm() {
+        Set<ConstraintViolation<Film>> violations = validator.validate(invalidDurationFilm);
+        assertEquals(1, violations.size());
     }
 
     @Test
-    void shouldThrowExceptionWhenCreateInvalidReleaseDateFilm() {
-        assertThrows(ValidationException.class, () -> filmControllerWithFilms.create(invalidReleaseDateFilm));
+    void shouldFailValidationWhenCreateInvalidReleaseDateFilm() {
+        Set<ConstraintViolation<Film>> violations = validator.validate(invalidReleaseDateFilm);
+        assertEquals(1, violations.size());
+        //assertThrows(ValidationException.class, () -> filmControllerWithFilms.create(invalidReleaseDateFilm));
     }
 
     @Test
-    void shouldThrowExceptionWhenCreateInvalidDescriptionLengthFilm() {
-        assertThrows(ValidationException.class, () -> filmControllerWithFilms.create(invalidDescriptionLengthFilm));
+    void shouldFailValidationWhenCreateInvalidDescriptionLengthFilm() {
+        Set<ConstraintViolation<Film>> violations = validator.validate(invalidDescriptionLengthFilm);
+        assertEquals(1, violations.size());
     }
 
     @Test
-    void shouldThrowExceptionWhenCreateInvalidNameFilm() {
-        assertThrows(ValidationException.class, () -> filmControllerWithFilms.create(invalidNameFilm));
+    void shouldFailValidationWhenCreateInvalidNameFilm() {
+        Set<ConstraintViolation<Film>> violations = validator.validate(invalidNameFilm);
+        assertEquals(1, violations.size());
     }
 
     @Test
@@ -116,27 +129,31 @@ class FilmControllerTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenUpdateInvalidDurationFilm() {
+    void shouldFailValidationWhenUpdateInvalidDurationFilm() {
         film1.setDuration(-100);
-        assertThrows(ValidationException.class, () -> filmControllerWithFilms.update(film1));
+        Set<ConstraintViolation<Film>> violations = validator.validate(film1);
+        assertEquals(1, violations.size());
     }
 
     @Test
-    void shouldThrowExceptionWhenUpdateInvalidReleaseDateFilm() {
+    void shouldFailValidationWhenUpdateInvalidReleaseDateFilm() {
         film1.setReleaseDate(LocalDate.of(1850, 1,1));
-        assertThrows(ValidationException.class, () -> filmControllerWithFilms.update(film1));
+        Set<ConstraintViolation<Film>> violations = validator.validate(film1);
+        assertEquals(1, violations.size());
     }
 
     @Test
-    void shouldThrowExceptionWhenUpdateInvalidDescriptionLengthFilm() {
+    void shouldFailValidationWhenUpdateInvalidDescriptionLengthFilm() {
         film1.setDescription("invalidDescriptionLengthFilm".repeat(10));
-        assertThrows(ValidationException.class, () -> filmControllerWithFilms.update(film1));
+        Set<ConstraintViolation<Film>> violations = validator.validate(film1);
+        assertEquals(1, violations.size());
     }
 
     @Test
-    void shouldThrowExceptionWhenUpdateInvalidNameFilm() {
+    void shouldFailValidationWhenUpdateInvalidNameFilm() {
         film1.setName("");
-        assertThrows(ValidationException.class, () -> filmControllerWithFilms.update(film1));
+        Set<ConstraintViolation<Film>> violations = validator.validate(film1);
+        assertEquals(1, violations.size());
     }
 
     @Test

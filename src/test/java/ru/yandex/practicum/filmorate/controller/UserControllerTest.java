@@ -5,9 +5,14 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,6 +27,8 @@ class UserControllerTest {
     User invalidEmailUser;
     User invalidBirthDayUser;
     User emptyNameUser;
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    Validator validator = factory.getValidator();
 
     @BeforeEach
     void initializeTestData() throws ValidationException {
@@ -64,12 +71,12 @@ class UserControllerTest {
         invalidBirthDayUser.setName("user2");
         invalidBirthDayUser.setLogin("user2");
         invalidBirthDayUser.setBirthday(LocalDate.now().plusYears(100));
-        invalidBirthDayUser.setEmail("mail.ru");
+        invalidBirthDayUser.setEmail("mail@mail.ru");
 
         emptyNameUser = new User();
         emptyNameUser.setLogin("user2");
         emptyNameUser.setBirthday(LocalDate.now().minusYears(30));
-        emptyNameUser.setEmail("mail.ru");
+        emptyNameUser.setEmail("mail@mail.ru");
 
     }
 
@@ -90,17 +97,20 @@ class UserControllerTest {
 
     @Test
     void shouldThrowExceptionWhenCreateInvalidLoginUser() {
-        assertThrows(ValidationException.class, () -> userControllerWithUsers.create(invalidLoginUser));
+        Set<ConstraintViolation<User>> violations = validator.validate(invalidLoginUser);
+        assertEquals(1, violations.size());
     }
 
     @Test
     void shouldThrowExceptionWhenCreateInvalidEmailUser() {
-        assertThrows(ValidationException.class, () -> userControllerWithUsers.create(invalidEmailUser));
+        Set<ConstraintViolation<User>> violations = validator.validate(invalidEmailUser);
+        assertEquals(1, violations.size());
     }
 
     @Test
     void shouldThrowExceptionWhenCreateInvalidBirthDayUser() {
-        assertThrows(ValidationException.class, () -> userControllerWithUsers.create(invalidBirthDayUser));
+        Set<ConstraintViolation<User>> violations = validator.validate(invalidBirthDayUser);
+        assertEquals(1, violations.size());
     }
 
     @Test
@@ -111,19 +121,22 @@ class UserControllerTest {
     @Test
     void shouldThrowExceptionWhenUpdateInvalidLoginUser() {
         user1.setLogin("");
-        assertThrows(ValidationException.class, () -> userControllerWithUsers.update(user1));
+        Set<ConstraintViolation<User>> violations = validator.validate(invalidLoginUser);
+        assertEquals(1, violations.size());
     }
 
     @Test
     void shouldThrowExceptionWhenUpdateInvalidEmailUser() {
         user1.setEmail("");
-        assertThrows(ValidationException.class, () -> userControllerWithUsers.update(user1));
+        Set<ConstraintViolation<User>> violations = validator.validate(user1);
+        assertEquals(1, violations.size());
     }
 
     @Test
     void shouldThrowExceptionWhenUpdateInvalidBirthDayUser() {
         user1.setBirthday(LocalDate.now().plusYears(100));
-        assertThrows(ValidationException.class, () -> userControllerWithUsers.create(user1));
+        Set<ConstraintViolation<User>> violations = validator.validate(user1);
+        assertEquals(1, violations.size());
     }
 
     @Test
