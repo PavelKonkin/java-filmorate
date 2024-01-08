@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 
 import javax.validation.ConstraintViolation;
@@ -194,7 +193,7 @@ class FilmControllerTest {
 
     @Test
     void shouldDelete() {
-        assertDoesNotThrow(() ->filmControllerWithFilms.delete(film1.getId()));
+        assertDoesNotThrow(() -> filmControllerWithFilms.delete(film1.getId()));
         assertEquals(1, filmControllerWithFilms.findAll().size());
         assertThrows(NotFoundException.class, () -> filmControllerWithFilms.findFilm(film1.getId()));
     }

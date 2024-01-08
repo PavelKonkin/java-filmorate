@@ -7,7 +7,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.time.LocalDate;
 import java.util.List;
 
-class InMemoryFilmStorageTest extends FilmStorageTest<InMemoryFilmStorage>{
+class InMemoryFilmStorageTest extends FilmStorageTest<InMemoryFilmStorage> {
 
     @BeforeEach
     void setUp() throws ValidationException {
