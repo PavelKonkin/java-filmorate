@@ -4,11 +4,11 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
 
-public class AfterCinemaBirthdayValidator implements ConstraintValidator<AfterCinemaBirthday, LocalDate> {
+public class AfterDateValidator implements ConstraintValidator<AfterDate, LocalDate> {
     private String specificDate;
 
     @Override
-    public void initialize(AfterCinemaBirthday constraintAnnotation) {
+    public void initialize(AfterDate constraintAnnotation) {
         specificDate = constraintAnnotation.specificDate();
     }
 
