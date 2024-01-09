@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -8,6 +10,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -16,6 +19,7 @@ import java.util.List;
 public class FilmController {
     private final FilmService filmService;
 
+    @Autowired
     public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
@@ -27,12 +31,9 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public Film findFilm(@PathVariable Integer id) throws NotFoundException, ValidationException {
-        if (id != null) {
-            return filmService.findFilmById(id);
-        } else {
-            throw new ValidationException();
-        }
+    @Validated
+    public Film findFilm(@PathVariable @NotNull Integer id) throws NotFoundException, ValidationException {
+        return filmService.findFilmById(id);
     }
 
     @PostMapping
@@ -58,36 +59,31 @@ public class FilmController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) throws NotFoundException, ValidationException {
-        if (id != null) {
-            filmService.deleteFilmById(id);
-        } else {
-            throw new ValidationException();
-        }
+    @Validated
+    public void delete(@PathVariable @NotNull Integer id) throws NotFoundException, ValidationException {
+        filmService.deleteFilmById(id);
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public void likeFilm(@PathVariable Integer id, @PathVariable Integer userId)
+    @Validated
+    public void likeFilm(@PathVariable @NotNull Integer id, @PathVariable @NotNull Integer userId)
             throws NotFoundException, ValidationException {
-        if (id != null && userId != null) {
-            filmService.likeFilm(id, userId);
-        } else {
-            throw new ValidationException();
-        }
+        filmService.likeFilm(id, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public void deleteLike(@PathVariable Integer id, @PathVariable Integer userId) throws NotFoundException, ValidationException {
-        if (id != null && userId != null) {
-            filmService.deleteLike(id, userId);
-        } else {
-            throw new ValidationException();
-        }
+    @Validated
+    public void deleteLike(@PathVariable @NotNull Integer id, @PathVariable @NotNull Integer userId)
+            throws NotFoundException, ValidationException {
+        filmService.deleteLike(id, userId);
     }
 
     @GetMapping("/popular")
     public List<Film> findPopularFilms(@RequestParam(required = false, defaultValue = "10") Integer count)
             throws ValidationException {
+        if (count == null || count < 0) {
+            throw new ValidationException();
+        }
         return filmService.findPopularFilms(count);
     }
 

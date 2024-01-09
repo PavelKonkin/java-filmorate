@@ -145,16 +145,6 @@ class FilmServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenFindPopularFilmsWithIncorrectCount() {
-        assertThrows(ValidationException.class, () -> filmService.findPopularFilms(-3));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenFindPopularFilmsWithNullCount() {
-        assertThrows(ValidationException.class, () -> filmService.findPopularFilms(null));
-    }
-
-    @Test
     void shouldFindFilmById() throws ValidationException, NotFoundException {
         Film foundFilm = filmService.findFilmById(film2.getId());
         assertEquals(film2, foundFilm);

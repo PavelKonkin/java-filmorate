@@ -13,9 +13,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handleValidationException(MethodArgumentNotValidException ex) throws ValidationException {
+    public ErrorResponse handleValidationException(MethodArgumentNotValidException ex) throws ValidationException {
         log.debug("Ошибка валидации фильма {}", ex.getBindingResult().getTarget());
-        throw new ValidationException();
+        return new ErrorResponse(ex.getMessage());
     }
 
     @ExceptionHandler(ValidationException.class)

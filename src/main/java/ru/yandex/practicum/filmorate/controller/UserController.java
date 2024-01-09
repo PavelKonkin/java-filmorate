@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -8,6 +10,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -16,6 +19,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -27,12 +31,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User findUser(@PathVariable Integer id) throws NotFoundException, ValidationException {
-        if (id != null) {
-            return userService.findUserById(id);
-        } else {
-            throw new ValidationException();
-        }
+    @Validated
+    public User findUser(@PathVariable @NotNull Integer id) throws NotFoundException, ValidationException {
+        return userService.findUserById(id);
     }
 
     @PostMapping
@@ -58,46 +59,36 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public void addToFriends(@PathVariable Integer id, @PathVariable Integer friendId)
+    @Validated
+    public void addToFriends(@PathVariable @NotNull Integer id, @PathVariable @NotNull Integer friendId)
             throws NotFoundException, ValidationException {
-        if (id != null && friendId != null) {
-            userService.addToFriends(id, friendId);
-        } else {
-            throw new ValidationException();
-        }
+        userService.addToFriends(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public void deleteFromFriends(@PathVariable Integer id, @PathVariable Integer friendId)
+    @Validated
+    public void deleteFromFriends(@PathVariable @NotNull Integer id, @PathVariable @NotNull Integer friendId)
             throws NotFoundException, ValidationException {
-        if (id != null && friendId != null) {
-            userService.deleteFromFriends(id, friendId);
-        } else {
-            throw new ValidationException();
-        }
+        userService.deleteFromFriends(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
-    public List<User> findUserFriends(@PathVariable Integer id) throws NotFoundException, ValidationException {
-        if (id != null) {
-            return userService.findUserFriends(id);
-        } else {
-            throw new ValidationException();
-        }
+    @Validated
+    public List<User> findUserFriends(@PathVariable @NotNull Integer id) throws NotFoundException, ValidationException {
+        return userService.findUserFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public List<User> findCommonFriends(@PathVariable Integer id, @PathVariable Integer otherId)
+    @Validated
+    public List<User> findCommonFriends(@PathVariable @NotNull Integer id,
+                                        @PathVariable @NotNull Integer otherId)
             throws NotFoundException, ValidationException {
-        if (id != null && otherId != null) {
-            return userService.findCommonFriends(id, otherId);
-        } else {
-            throw new ValidationException();
-        }
+        return userService.findCommonFriends(id, otherId);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Integer id) throws ValidationException, NotFoundException {
+    @Validated
+    public void deleteUser(@PathVariable @NotNull Integer id) throws ValidationException, NotFoundException {
         if (id != null) {
             userService.deleteUserById(id);
         } else {

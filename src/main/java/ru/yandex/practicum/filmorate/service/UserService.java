@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserStorage userStorage;
 
+    @Autowired
     public UserService(UserStorage userStorage) {
         this.userStorage = userStorage;
     }
@@ -45,13 +47,11 @@ public class UserService {
     }
 
     public void addToFriends(Integer id, Integer friendId) throws NotFoundException, ValidationException {
-        addToFriend(id, friendId);
-        addToFriend(friendId, id);
+        updateFriendship(id, friendId, FriendshipAction.ADD_TO_FRIENDS);
     }
 
     public void deleteFromFriends(Integer id, Integer friendId) throws NotFoundException, ValidationException {
-        removeFromFriends(id, friendId);
-        removeFromFriends(friendId, id);
+        updateFriendship(id, friendId, FriendshipAction.REMOVE_FROM_FRIENDS);
     }
 
     public List<User> findUserFriends(Integer id) throws NotFoundException, ValidationException {
@@ -69,12 +69,6 @@ public class UserService {
         return commonFriends;
     }
 
-    private void checkUserName(User user) {
-        if ((user.getName() == null) || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-    }
-
     public User findUserById(Integer id) throws NotFoundException, ValidationException {
         if (id == null) {
             throw new ValidationException();
@@ -88,17 +82,30 @@ public class UserService {
         userStorage.delete(findUserById(id));
     }
 
-    private void addToFriend(Integer id, Integer otherId) throws NotFoundException, ValidationException {
-        User user = findUserById(id);
-        Set<Integer> userFriends = user.getFriends();
-        userFriends.add(otherId);
-        userStorage.update(user);
+    private void checkUserName(User user) {
+        if ((user.getName() == null) || user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        }
     }
 
-    private void removeFromFriends(Integer id, Integer otherId) throws NotFoundException, ValidationException {
+    private void updateFriendship(Integer id, Integer otherId, FriendshipAction action) throws NotFoundException, ValidationException {
         User user = findUserById(id);
+        User otherUser = findUserById(otherId);
         Set<Integer> userFriends = user.getFriends();
-        userFriends.remove(otherId);
+        Set<Integer> otherUserFriends = otherUser.getFriends();
+        if (action == FriendshipAction.ADD_TO_FRIENDS) {
+            userFriends.add(otherId);
+            otherUserFriends.add(id);
+        } else if (action == FriendshipAction.REMOVE_FROM_FRIENDS) {
+            userFriends.remove(otherId);
+            otherUserFriends.remove(id);
+        }
         userStorage.update(user);
+        userStorage.update(otherUser);
+    }
+
+    private enum FriendshipAction {
+        ADD_TO_FRIENDS,
+        REMOVE_FROM_FRIENDS
     }
 }

@@ -248,4 +248,11 @@ class UserControllerTest {
                 () -> userControllerWithUsers.findCommonFriends(null, null));
     }
 
+    @Test
+    void shouldDelete() throws ValidationException, NotFoundException {
+        userControllerWithUsers.deleteUser(user1.getId());
+        assertEquals(1, userControllerWithUsers.findAll().size());
+        assertFalse(userControllerWithUsers.findAll().contains(user1));
+    }
+
 }
