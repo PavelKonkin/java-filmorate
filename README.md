@@ -43,7 +43,7 @@ FROM films AS f
 LEFT JOIN likes AS l ON f.id = l.film_id
 
 GROUP BY f.id
-ORDER BY likes_count
+ORDER BY likes_count DESC
 LIMIT 10
 ```
 
