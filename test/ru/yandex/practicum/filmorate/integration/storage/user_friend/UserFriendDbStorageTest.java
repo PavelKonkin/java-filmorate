@@ -42,7 +42,7 @@ public class UserFriendDbStorageTest {
                 .birthday(LocalDate.of(1990, 1, 1))
                 .build();
 
-        int userId2= userStorage.add(newUser2);
+        int userId2 = userStorage.add(newUser2);
 
         // вызываем тестируемый метод
 
@@ -79,7 +79,7 @@ public class UserFriendDbStorageTest {
                 .birthday(LocalDate.of(1990, 1, 1))
                 .build();
 
-        int userId2= userStorage.add(newUser2);
+        int userId2 = userStorage.add(newUser2);
 
         userFriendDbStorage.addFriend(userId1, userId2);
 

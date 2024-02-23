@@ -37,10 +37,10 @@ class UserControllerTest {
     void initializeTestData() throws ValidationException, NotFoundException {
         InMemoryUserStorage inMemoryUserStorage1 = new InMemoryUserStorage();
         InMemoryUserStorage inMemoryUserStorage2 = new InMemoryUserStorage();
-        userControllerWithUsers = new UserController(new UserService(inMemoryUserStorage1
-                , new InMemoryUserFriendStorage(inMemoryUserStorage1)));
-        userControllerWithoutUsers = new UserController(new UserService(inMemoryUserStorage2
-                , new InMemoryUserFriendStorage(inMemoryUserStorage2)));
+        userControllerWithUsers = new UserController(new UserService(inMemoryUserStorage1,
+                new InMemoryUserFriendStorage(inMemoryUserStorage1)));
+        userControllerWithoutUsers = new UserController(new UserService(inMemoryUserStorage2,
+                new InMemoryUserFriendStorage(inMemoryUserStorage2)));
 
         user1 = User.builder()
                 .email("user1@mail.com")

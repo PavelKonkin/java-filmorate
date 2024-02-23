@@ -64,6 +64,7 @@
 					<failsOnError>true</failsOnError>
 					<linkXRef>false</linkXRef>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
+					<testSourceDirectories>test</testSourceDirectories>
 				</configuration>
 				<executions>
 					<execution>
