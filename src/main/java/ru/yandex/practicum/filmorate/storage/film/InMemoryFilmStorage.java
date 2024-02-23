@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -16,9 +17,10 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
 
     @Override
-    public void add(Film film) throws ValidationException {
+    public int add(Film film) throws ValidationException {
         if (film != null) {
             films.put(film.getId(), film);
+            return film.getId();
         } else {
             throw new ValidationException();
         }
@@ -51,8 +53,26 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
     }
 
+    @Override
     public List<Film> findAll() {
         return List.copyOf(films.values());
+    }
+
+    @Override
+    public Film get(int id) throws NotFoundException {
+        Film film = films.get(id);
+        if (film == null) {
+            throw new NotFoundException();
+        }
+        return films.get(id);
+    }
+
+    @Override
+    public List<Film> getPopular(Integer count) {
+        return findAll().stream()
+                .sorted((o1, o2) -> o2.getLikes().size() - o1.getLikes().size())
+                .limit(count)
+                .collect(Collectors.toList());
     }
 
 }
