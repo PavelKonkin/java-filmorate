@@ -24,11 +24,6 @@ public class MPADbStorage implements MPAStorage {
     }
 
     @Override
-    public int create(MPA mpa) {
-        return 0;
-    }
-
-    @Override
     public List<MPA> findAll() {
         String sql = "select * from mpa";
         return jdbcTemplate.query(sql,(rs, rowNum) -> makeMPA(rs));

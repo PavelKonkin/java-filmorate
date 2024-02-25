@@ -1,9 +1,12 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 import ru.yandex.practicum.filmorate.validator.AfterDate;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -14,11 +17,17 @@ import java.util.*;
 /**
  * Film.
  */
-@Data
+@Entity
+@Getter
+@Setter
+@ToString
 @Builder(toBuilder = true)
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
 public class Film {
     private static final String CINEMA_BIRTHDAY = "1895-12-28";
-    private final int id;
+    @Id
+    private final Integer id;
 
     @NotBlank
     private String name;
@@ -36,9 +45,12 @@ public class Film {
 
     private static int idCounter = 1;
 
+    @Transient
     private final Set<Integer> likes = new HashSet<>();
-
+    @Transient
+    @ToString.Exclude
     private final TreeSet<Genre> genres;
+    @Transient
     private MPA mpa;
 
     public static void increaseIdCounter() {
@@ -54,5 +66,21 @@ public class Film {
         values.put("rating_id", mpa.getId());
 
         return values;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Film film = (Film) o;
+        return getId() != null && Objects.equals(getId(), film.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

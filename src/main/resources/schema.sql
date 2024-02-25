@@ -1,11 +1,12 @@
 -- Удаление всех таблиц
--- drop table IF EXISTS FILM_LIKE;
--- drop table IF EXISTS USER_FRIEND;
--- drop table IF EXISTS FILM_GENRE;
--- drop table IF EXISTS GENRE;
--- drop table IF EXISTS USERS;
--- drop table IF EXISTS FILMS;
--- drop table IF EXISTS MPA;
+drop table IF EXISTS FILM_LIKE;
+drop table IF EXISTS USER_FRIEND;
+drop table IF EXISTS FILM_GENRE;
+drop table IF EXISTS GENRE;
+drop table IF EXISTS USERS;
+drop table IF EXISTS FILMS;
+drop table IF EXISTS MPA;
+
 create table IF NOT EXISTS MPA
 (
     ID   INTEGER auto_increment,
