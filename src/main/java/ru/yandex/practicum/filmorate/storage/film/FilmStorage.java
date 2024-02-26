@@ -7,11 +7,15 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.util.List;
 
 public interface FilmStorage {
-    void add(Film film) throws ValidationException;
+    int add(Film film) throws ValidationException;
 
     void update(Film film) throws NotFoundException, ValidationException;
 
     void delete(Integer id) throws NotFoundException, ValidationException;
 
     List<Film> findAll();
+
+    Film get(int id) throws NotFoundException;
+
+    List<Film> getPopular(Integer count);
 }

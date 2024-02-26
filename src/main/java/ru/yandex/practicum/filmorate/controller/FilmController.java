@@ -39,8 +39,7 @@ public class FilmController {
     @PostMapping
     public Film create(@Valid @RequestBody Film film) throws ValidationException {
         if (film != null) {
-            filmService.create(film);
-            return film;
+            return filmService.create(film);
         } else {
             log.debug("Ошибка валидации фильма: пришел null");
             throw new ValidationException();

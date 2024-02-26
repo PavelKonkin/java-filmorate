@@ -39,8 +39,7 @@ public class UserController {
     @PostMapping
     public User create(@Valid @RequestBody User user) throws ValidationException {
         if (user != null) {
-            userService.create(user);
-            return user;
+            return userService.create(user);
         } else {
             log.debug("Ошибка валидации пользователя: пришел null");
             throw new ValidationException();
